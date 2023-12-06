@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0" />
+        <script src="/SASJobExecution/resources/sap/ui/thirdparty/jquery.js"></script>
+        <script src="/SASJobExecution/resources/dynamic.min.js"></script>
+        <title>Job Execution</title>
+        <style>
+            iframe {
+                width: 90dvw;
+                height: 50dvh;
+            }
+            .formElement {
+                padding: 10px;
+            }
+            .formElement label {
+                font-weight: bold;
+                min-width: 150px;
+                display: inline-block;
+            }
+            .formElement select {
+                min-width: 200px;
+            }
+        </style>
+    </head>
+    <body onload="SASDynamic.init()">
+        <h1>Retrieve cars properties</h1>
+        <form action="/SASJobExecution/">
+            <input
+                type="hidden"
+                name="_program"
+                value="$PROGRAM$" />
+            <input
+                type="hidden"
+                name="_action"
+                value="execute" />
+            <input
+                type="hidden"
+                name="_action"
+                value="wait" />
+            <div class="formElement">
+                <label for="cars">Choose a brand:</label>
+                <select
+                    name="make"
+                    id="make"
+                    data-colname="make"
+                    data-library="SASHELP"
+                    data-table="CARS"></select>
+            </div>
+            <div class="formElement">
+                <label for="type">Choose a type:</label>
+                <select
+                    name="type"
+                    id="type"
+                    data-colname="type"
+                    data-library="SASHELP"
+                    data-table="CARS"
+                    data-uses="make"></select>
+            </div>
+            <div class="formElement">
+                <label for="model">Choose a model:</label>
+                <select
+                    name="model"
+                    id="model"
+                    data-colname="model"
+                    data-library="SASHELP"
+                    data-table="CARS"
+                    data-uses="make, type"></select>
+            </div>
+            <br />
+            <div class="formElement">
+                <input
+                    type="submit"
+                    value="RETRIEVE INFORMATION" />
+            </div>
+        </form>
+        <iframe id="results"> </iframe>
+        <script>
+            $('form').on('submit', (event) => {
+                event.preventDefault()
+                const urlParams = $('form').serialize()
+                const url = `/SASJobExecution/?${urlParams}`
+                $('#results').attr('src', url)
+            })
+        </script>
+    </body>
+</html>
